@@ -1,25 +1,15 @@
-const { ApolloServer, gql } = require('apollo-server');
-const typeDefs = require('./graphql/schema/index');
+const { ApolloServer } = require('apollo-server');
+const typeDefs = require('./src/typeDefs/index');
+const resolvers = require('./src/resolvers/index');
 
-// sample collectiont to get setup
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling'
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton'
-  }
-];
+const XivApi = require('./src/datasources/xivapi/xivApi');
 
-const resolvers = {
-  Query: {
-    books: () => books
-  }
-};
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources: () => ({
+    xivApi: new XivApi()
+  })
+});
 
-const server = new ApolloServer({ typeDefs, resolvers });
-const PORT = process.env.PORT || 5000;
-
-server.listen(PORT).then(({ url }) => console.log(`Server ready at ${url}`));
+server.listen().then(({ url }) => console.log(`Server running at ${url}`));

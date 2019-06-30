@@ -1,18 +1,19 @@
 {
-  "name": "theXIV",
+  "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "graphql layer for xivapi",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client:dev": "npm run develop --prefix ../client"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Michael Cacciano",
+  "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.6.7",
-    "graphql": "^14.4.1"
+    "apollo-datasource-rest": "^0.5.0",
+    "apollo-server": "^2.6.3",
+    "graphql": "^14.3.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
