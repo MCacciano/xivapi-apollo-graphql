@@ -22,6 +22,15 @@ module.exports = {
       });
 
       return members;
+    },
+    characterSearch: async (_, { name, server }, { dataSources }) => {
+      const results = await dataSources.xivApi.characterSearch({
+        name,
+        server
+      });
+      console.log(results);
+
+      return results.map(res => ({ ...res, LFR: true }));
     }
   }
 };

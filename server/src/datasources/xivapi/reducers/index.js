@@ -64,8 +64,8 @@ const freeCompanyReducer = (
   };
 };
 
-const memberReducer = member => {
-  let { Avatar, FeastMatches, ID, Name, Rank, RankIcon, Server } = member;
+const characterReducer = character => {
+  let { Avatar, FeastMatches, ID, Name, Rank, RankIcon, Server } = character;
 
   return {
     Avatar,
@@ -80,5 +80,5 @@ const memberReducer = member => {
 
 module.exports = {
   freeCompanyReducer,
-  memberReducer
+  characterReducer
 };
