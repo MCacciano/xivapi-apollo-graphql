@@ -1,7 +1,7 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
 
 // Reducer
-const { freeCompanyReducer, memberReducer } = require('./reducers/index');
+const { freeCompanyReducer, characterReducer } = require('./reducers/index');
 
 class XivApi extends RESTDataSource {
   constructor() {
@@ -23,7 +23,7 @@ class XivApi extends RESTDataSource {
         data: 'FCM'
       });
       return Array.isArray(res.FreeCompanyMembers)
-        ? res.FreeCompanyMembers.map(member => memberReducer(member))
+        ? res.FreeCompanyMembers.map(member => characterReducer(member))
         : {};
     } catch (err) {
       console.error(err);
@@ -69,6 +69,26 @@ class XivApi extends RESTDataSource {
       return freeCompanyReducer(freeCompany, { getMembers });
     } catch (err) {
       console.error(err);
+      throw err;
+    }
+  }
+
+  // CHARACTER
+  async characterSearch({ name = '', server = '' }) {
+    try {
+      const firstName = name.split(' ')[0];
+      const lastName = name.split(' ')[1];
+
+      const searchName = `${firstName}+${lastName}`;
+
+      const results = await this.get(
+        `/character/search?name=${searchName}&server=${server}`
+      );
+
+      return results.Results.map(res => characterReducer(res));
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
   }
 }
