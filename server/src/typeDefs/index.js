@@ -1,6 +1,6 @@
 const root = require('./root');
-const freeCompany = require('./freeCompany');
-const character = require('./character');
+const freeCompany = require('./xivapi/freeCompany');
+const character = require('./xivapi/character');
 
 const schemaArray = [root, freeCompany, character];
 
