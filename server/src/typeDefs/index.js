@@ -1,7 +1,7 @@
 const root = require('./root');
-const freeCompany = require('./xivapi/freeCompany');
-const character = require('./xivapi/character');
 
-const schemaArray = [root, freeCompany, character];
+const xivapiSchemas = require('./xivapi/index');
+
+const schemaArray = [root, ...xivapiSchemas];
 
 module.exports = schemaArray;

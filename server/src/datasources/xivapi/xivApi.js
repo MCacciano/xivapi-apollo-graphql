@@ -75,12 +75,17 @@ class XivApi extends RESTDataSource {
 
   // CHARACTER
   async characterSearch({ name = '', server = '' }) {
+    const searchNameArr = name.split(' ');
+
+    if (searchNameArr.length < 1 || searchNameArr.length > 2) {
+      throw new Error(
+        `You must use the characters first and last name. Server is not required.`
+      );
+    }
+
+    const searchName = `${searchNameArr[0]}+${searchNameArr[1]}`;
+
     try {
-      const firstName = name.split(' ')[0];
-      const lastName = name.split(' ')[1];
-
-      const searchName = `${firstName}+${lastName}`;
-
       const results = await this.get(
         `/character/search?name=${searchName}&server=${server}`
       );

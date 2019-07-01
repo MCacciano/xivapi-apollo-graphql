@@ -11,6 +11,10 @@ const characterType = gql`
     LFR: Boolean
   }
 
+  # type Character {
+
+  # }
+
   extend type Query {
     characterSearch(name: String!, server: String): [CharacterSearch!]!
   }
