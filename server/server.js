@@ -31,7 +31,7 @@ mongoose
   .then(() => {
     console.log(`MongoDB connected`);
     app.listen({ port: PORT }, () => {
-      console.log(`Apoller Server on http:localhost:${PORT}/graphql`);
+      console.log(`Apoller Server running at http://localhost:${PORT}/graphql`);
     });
   })
   .catch(err => console.error(err));

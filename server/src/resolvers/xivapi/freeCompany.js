@@ -1,6 +1,6 @@
 module.exports = {
   freeCompanies: async (_, { name, server }, { dataSources }) => {
-    const freeCompanies = await dataSources.xivApi.searchForFreeCompany({
+    const freeCompanies = await dataSources.xivApi.freeCompanySearch({
       name,
       server
     });

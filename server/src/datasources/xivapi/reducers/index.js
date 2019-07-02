@@ -65,7 +65,7 @@ const freeCompanyReducer = (
 };
 
 const characterReducer = character => {
-  let { Avatar, FeastMatches, ID, Name, Rank, RankIcon, Server } = character;
+  const { Avatar, FeastMatches, ID, Name, Rank, RankIcon, Server } = character;
 
   return {
     Avatar,
@@ -78,7 +78,69 @@ const characterReducer = character => {
   };
 };
 
+// TODO: This can also produce a character's FC as well as the members of that FC
+// TODO: Decide whether to add that into this type since there are already ways to acces that data directly
+const characterDetailReducer = character => {
+  const {
+    ActiveClassJob,
+    Avatar,
+    Bio,
+    ClassJobs,
+    FreeCompanyId,
+    GearSet,
+    Gender,
+    GenderID,
+    GrandCompany,
+    GuardianDeity,
+    ID,
+    Minions,
+    MinionsCount,
+    MinionsProgress,
+    MinionsTotal,
+    Mounts,
+    MountsCount,
+    MountsProgress,
+    MountsTotal,
+    Name,
+    Nameday,
+    ParseDate,
+    Portrait,
+    PvPTeamId,
+    Race,
+    Server,
+    Title,
+    Town,
+    Tribe
+  } = character;
+
+  return {
+    ActiveClassJob,
+    Avatar,
+    Bio,
+    // ClassJobs,
+    FreeCompanyId,
+    // GearSet,
+    Gender,
+    // GrandCompany,
+    GuardianDeity,
+    ID,
+    // Minions,
+    // Mounts,
+    Name,
+    Nameday,
+    ParseDate,
+    Portrait,
+    PvPTeamId,
+    Race,
+    Server,
+    Title,
+    Town,
+    Tribe
+  };
+};
+
 module.exports = {
   freeCompanyReducer,
-  characterReducer
+  characterReducer,
+  characterDetailReducer
 };
