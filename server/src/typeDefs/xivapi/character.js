@@ -1,4 +1,5 @@
 const { gql } = require('apollo-server');
+const { FreeCompany, FreeCompanyMember } = require('./freeCompany');
 
 // All character types mirror their API/response fields
 
@@ -13,96 +14,99 @@ const characterType = gql`
     LFR: Boolean
   }
 
-  type Character {
-    ActiveClassJob: null
-    Avatar: String
-    Bio: String
-    ClassJobs: null
-    FreeCompanyId: String
-    GearSet: null
-    Gender: Number
-    GenderID: Number
-    GrandCompany: null
-    GuardianDeity: null
-    ID: Number
-    Minions: null
-    MinionsCount: Number
-    MinionsProgress: String
-    MinionsTotal: Number
-    Mounts: null
-    MountsCount: Number
-    MountsProgress: String
-    MountsTotal: Number
-    Name: String
-    Nameday: String
-    ParseDate: Number
-    Portrait: String
-    PvPTeamId: null
-    Race: null
-    Server: String
-    Title: null
-    Town: null
-    Tribe: null
+  type CharacterResponseType {
+    Achievements: CharacterAchievements
+    Character: Character
+    FreeCompany: FreeCompany
+    FreeCompanyMembers: [FreeCompanyMember]
+    # Friends: {}
+    # Info: {}
+    # PVPTeam: {}
   }
 
-  # type Character {
-  #   ActiveClassJob: ActiveClassJob
-  #   Avatar: String
-  #   Bio: String
-  #   # ClassJobs: {}
-  #   FreeCompanyId: String
-  #   # GearSet: {}
-  #   Gender: Int
-  #   # GrandCompany: {}
-  #   GuardianDeity: Int
-  #   ID: Int
-  #   # Minions: []
-  #   # Mounts: []
-  #   Name: String
-  #   Nameday: String
-  #   ParseDate: Int
-  #   Portrait: String
-  #   PvPTeamId: String
-  #   Race: Int
-  #   Server: String
-  #   Title: Int
-  #   Town: Int
-  #   Tribe: Int
-  # }
+  enum CharacterResponseOptions {
+    Achievements
+    Character
+    FreeCompany
+    FreeCompanyMembers
+    # Friends
+    # Info
+    # PVPTeam
+  }
 
-  # type ActiveClassJob {
-  #   ClassID: Int
-  #   ExpLevel: Int
-  #   ExpLevelMax: Int
-  #   ExpLevelTogo: Int
-  #   IsSpecialised: Boolean
-  #   JobID: Int
-  #   Level: Int
-  # }
+  type CharacterAchievement {
+    Date: Int
+    ID: Int
+    Icon: String
+    Name: String
+    Points: Int
+  }
 
-  # type ClassJobs {
+  type CharacterAchievements {
+    List: [CharacterAchievement]
+    ParseDate: Int
+    Points: Int
+  }
 
-  # }
+  type Character {
+    # ActiveClassJob: null
+    Avatar: String
+    Bio: String
+    # ClassJobs: null
+    FreeCompanyId: String
+    FreeCompanyMembers: [FreeCompanyMember]
+    # GearSet: null
+    Gender: Int
+    GenderID: Int
+    # GrandCompany: null
+    # GuardianDeity: null
+    ID: Int
+    # Minions: null
+    MinionsCount: Int
+    MinionsProgress: String
+    MinionsTotal: Int
+    # Mounts: null
+    MountsCount: Int
+    MountsProgress: String
+    MountsTotal: Int
+    Name: String
+    Nameday: String
+    ParseDate: Int
+    Portrait: String
+    # PvPTeamId: null
+    # Race: null
+    Server: String
+    # Title: null
+    # Town: null
+    # Tribe: null
+  }
 
-  # type GearSet {
+  enum ExtendedDataOptions {
+    AC
+    FR
+    FC
+    FCM
+    PVP
+  }
 
-  # }
-
-  # type GrandCompany {
-
-  # }
-
-  # type Minion {
-
-  # }
-
-  # type Mount {
-
-  # }
+  input CharacterInput {
+    lodestoneID: String!
+    extended: Boolean
+    AC: Boolean
+    FR: Boolean
+    FC: Boolean
+    FCM: Boolean
+    PVP: Boolean
+  }
 
   extend type Query {
     characterSearch(name: String!, server: String): [CharacterSearch!]!
-    character(lodestoneID: String!): Character
+    character(
+      lodestoneID: String!
+      extended: Boolean
+      data: [ExtendedDataOptions]
+      responseOptions: [CharacterResponseOptions]
+    ): CharacterResponseType
   }
 `;
 

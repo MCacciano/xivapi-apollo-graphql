@@ -7,10 +7,18 @@ module.exports = {
 
     return results;
   },
-  character: async (_, { lodestoneID }, { dataSources }) => {
-    const result = await dataSources.xivApi.character({ lodestoneID });
+  character: async (
+    _,
+    { lodestoneID, extended = false, data, responseOptions },
+    { dataSources }
+  ) => {
+    const result = await dataSources.xivApi.character({
+      lodestoneID,
+      extended,
+      data,
+      responseOptions
+    });
 
-    console.log(result);
     return result;
   }
 };

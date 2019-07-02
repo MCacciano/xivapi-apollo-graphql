@@ -101,14 +101,28 @@ class XivApi extends RESTDataSource {
     }
   }
 
-  async character({ lodestoneID = '', extended = false }) {
-    if (typeof lodestoneID !== 'string')
-      throw new Error('The ID must be a lodestone ID and must be a string.');
+  async character({ lodestoneID, extended, data, responseOptions }) {
+    // const { lodestoneID, extended, AC, FR, FC, FCM, PVP } = characterInput.data;
+    const getExtended = extended ? '1' : '0';
 
     try {
-      const result = await this.get(`/character/${lodestoneID}`);
+      const result = await this.get(
+        `/character/${lodestoneID}?extended=${getExtended}&data=${data.join(
+          ','
+        )}`
+      );
 
-      return characterDetailReducer(result.Character);
+      const {
+        Achievements,
+        Character,
+        FreeCompany,
+        FreeCompanyMembers,
+        Friends,
+        Info,
+        PVPTeam
+      } = result;
+
+      return characterDetailReducer(result);
     } catch (err) {
       console.error(err);
       throw err;
