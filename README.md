@@ -6,5 +6,7 @@
 
 ## Status
 
-  Currently building GraphQL server and types, as well as implementing a very minimal Front End to start basic search functionality, 
+  * Currently building GraphQL server and types, as well as implementing a very minimal Front End to start basic search functionality, 
   and to verify data is being passed to the Front End through Apollo properly - 7/13/19
+  
+  *  Refactored GraphQL queries to request extended character information - changed names of requests to singular/plural - no front end currently ( deciding on straight React or trying Gatsby ) - 7/22/19
