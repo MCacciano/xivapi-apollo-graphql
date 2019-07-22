@@ -7,16 +7,6 @@ const freeCompanyType = gql`
     Name: String
     Server: String
   }
-
-  # type FreeCompany {
-  #   Active: String
-  #   Crest: [String]
-  #   Estate: Estate
-  #   ID: String
-  #   Name: String
-  #   FreeCompanyMembers: [FreeCompanyMember!]!
-  # }
-
   type FreeCompany {
     Active: String
     ActiveMemberCount: Int
@@ -78,9 +68,8 @@ const freeCompanyType = gql`
   }
 
   extend type Query {
-    freeCompany(lodestoneID: String!, getMembers: Boolean): FreeCompany
+    freeCompany(id: String!): FreeCompany
     freeCompanies(name: String!, server: String): [FreeCompanySearchResult!]!
-    members(name: String!, server: String!): [FreeCompanyMember!]!
   }
 `;
 

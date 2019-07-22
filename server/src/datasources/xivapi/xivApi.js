@@ -2,9 +2,10 @@ const { RESTDataSource } = require('apollo-datasource-rest');
 
 // Reducer
 const {
-  charactersReducer,
   freeCompanyReducer,
-  characterDetailReducer
+  freeCompaniesReducer,
+  characterReducer,
+  charactersReducer
 } = require('./reducers/index');
 
 class XivApi extends RESTDataSource {
@@ -13,6 +14,53 @@ class XivApi extends RESTDataSource {
     this.baseURL = 'https://xivapi.com';
   }
 
+  // * @route : /freecompany/:id
+  async freeCompany({ id = '' }) {
+    try {
+      const res = await this.get(`freecompany/${id}?extended=1&data=FCM`);
+      return freeCompanyReducer(res.FreeCompany);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // * @route  : /freecompany/search
+  // * @params : name: String, server: String, page: String/Int
+  async freeCompanies({ name = '', server = '', page = 1 }) {
+    try {
+      const res = await this.get(
+        `/freecompany/search?name=${name}&server=${server}&page=${page}`
+      );
+
+      const { Pagination, Results } = res;
+
+      if (!Array.isArray(Results)) return [];
+
+      return Results.map(freeCompany => freeCompaniesReducer(freeCompany));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // * @route : /character/:id
+  async character({ id }) {
+    const params = {
+      extended: 1
+    };
+
+    try {
+      // &columns-Character.portrait - add full character portrait to request
+      const res = await this.get(
+        `/character/${id}?extended=1&data=FC,FCM,AC,FR`
+      );
+      return characterReducer(res);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // * @route  : /character/search
+  // * @params : name: String, server: String, page: String/Int
   async characters({ name = '', server = '', page = 1 }) {
     let searchName =
       name.split(' ').length > 1
@@ -25,127 +73,14 @@ class XivApi extends RESTDataSource {
       );
 
       const { Pagination, Results } = res;
-      return Results;
 
-      console.log(res);
-    } catch (err) {}
+      if (!Array.isArray(Results)) return [];
+
+      return Results.map(character => charactersReducer(character));
+    } catch (err) {
+      console.error(err);
+    }
   }
-
-  // // This function assumes you are requesting a single Free Company's data and
-  // // know the name of the Free Company as well as the name of the server it resides on
-  // // name and server parameters are required in the query Type for members
-  // async getFreeCompanyMembers({ name = '', server = '' }) {
-  //   try {
-  //     const results = await this.get(`/freecompany/search`, {
-  //       name,
-  //       server
-  //     });
-
-  //     const res = await this.get(`/freecompany/${results.Results[0].ID}`, {
-  //       data: 'FCM'
-  //     });
-  //     return Array.isArray(res.FreeCompanyMembers)
-  //       ? res.FreeCompanyMembers.map(member => characterReducer(member))
-  //       : {};
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
-
-  // async freeCompanySearch({ name = '', server = '' }) {
-  //   try {
-  //     const res = await this.get(`/freecompany/search`, { name, server });
-  //     return Array.isArray(res.Results)
-  //       ? res.Results.map(fc => freeCompanyReducer(fc, { search: true }))
-  //       : [];
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
-
-  // async getFreeCompanyById({ lodestoneID = '', getMembers = false }) {
-  //   try {
-  //     let options = {};
-  //     let freeCompany = {};
-
-  //     if (getMembers) {
-  //       options = { data: 'FCM' };
-  //     }
-
-  //     const res = await this.get(`/freecompany/${lodestoneID}`, options);
-
-  //     if (
-  //       Array.isArray(res.FreeCompanyMembers) &&
-  //       res.FreeCompanyMembers.length > 0
-  //     ) {
-  //       freeCompany = {
-  //         ...res.FreeCompany,
-  //         FreeCompanyMembers: [...res.FreeCompanyMembers]
-  //       };
-  //     } else {
-  //       freeCompany = {
-  //         ...res.FreeCompany
-  //       };
-  //     }
-
-  //     return freeCompanyReducer(freeCompany, { getMembers });
-  //   } catch (err) {
-  //     console.error(err);
-  //     throw err;
-  //   }
-  // }
-
-  // // CHARACTER
-  // async characterSearch({ name = '', server = '' }) {
-  //   const searchNameArr = name.split(' ');
-
-  //   if (searchNameArr.length < 1 || searchNameArr.length > 2) {
-  //     throw new Error(
-  //       `You must use the characters first and last name. Server is not required.`
-  //     );
-  //   }
-
-  //   const searchName = `${searchNameArr[0]}+${searchNameArr[1]}`;
-
-  //   try {
-  //     const results = await this.get(
-  //       `/character/search?name=${searchName}&server=${server}`
-  //     );
-
-  //     return results.Results.map(res => characterReducer(res));
-  //   } catch (err) {
-  //     console.error(err);
-  //     throw err;
-  //   }
-  // }
-
-  // async character({ lodestoneID, extended, data, responseOptions }) {
-  //   // const { lodestoneID, extended, AC, FR, FC, FCM, PVP } = characterInput.data;
-  //   const getExtended = extended ? '1' : '0';
-
-  //   try {
-  //     const result = await this.get(
-  //       `/character/${lodestoneID}?extended=${getExtended}&data=${data.join(
-  //         ','
-  //       )}`
-  //     );
-
-  //     const {
-  //       Achievements,
-  //       Character,
-  //       FreeCompany,
-  //       FreeCompanyMembers,
-  //       Friends,
-  //       Info,
-  //       PVPTeam
-  //     } = result;
-
-  //     return characterDetailReducer(result);
-  //   } catch (err) {
-  //     console.error(err);
-  //     throw err;
-  //   }
-  // }
 }
 
 module.exports = XivApi;

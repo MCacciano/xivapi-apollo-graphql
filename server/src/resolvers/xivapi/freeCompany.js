@@ -1,25 +1,13 @@
 module.exports = {
   freeCompanies: async (_, { name, server }, { dataSources }) => {
-    const freeCompanies = await dataSources.xivApi.freeCompanySearch({
+    const res = await dataSources.xivApi.freeCompanies({
       name,
       server
     });
-    return freeCompanies;
+    return res;
   },
-  freeCompany: async (_, { lodestoneID, getMembers }, { dataSources }) => {
-    const freeCompany = await dataSources.xivApi.getFreeCompanyById({
-      lodestoneID,
-      getMembers
-    });
-    console.log(freeCompany);
-    return freeCompany;
-  },
-  members: async (_, { name, server }, { dataSources }) => {
-    const members = await dataSources.xivApi.getFreeCompanyMembers({
-      name,
-      server
-    });
-
-    return members;
+  freeCompany: async (_, { id }, { dataSources }) => {
+    const res = await dataSources.xivApi.freeCompany({ id });
+    return res;
   }
 };
